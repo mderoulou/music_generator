@@ -1,0 +1,19 @@
+#!/bin/python3
+#
+#   For the lib : pip install music
+#   By : Florent Loock & Maxime Deroulou
+#
+#
+import music as M
+import numpy as n
+
+# Init
+T = M.tables.Basic()
+H = M.utils.H
+b = M.core.Being()
+
+b.d_ = [1/2, 1/4, 1/4] # durations in seconds
+b.fv_ = [0, 1,5,15,150,1500,15000] # vibrato frequency
+b.nu_ = [5] # vibrato depth in semitones (maximum deviation of pitch)
+b.f_ = [220, 330] # frequencies for the notes
+b.render(30, 'aMusicalSound.wav') # render 30 notes iterating though the lists above
