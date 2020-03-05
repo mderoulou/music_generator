@@ -1,0 +1,102 @@
+#!/bin/python3
+#   https://pypi.org/project/music/
+#   For the lib : pip install music
+#   By : Florent Loock & Maxime Deroulou
+#
+#
+import music as M
+import numpy as n
+import sys as s
+import random as r
+
+# Init
+
+T = M.tables.Basic()
+H = M.utils.H
+b = M.core.Being()
+
+def main(av):
+    canta_t = 0.15
+    tab_size = 512
+
+    base = [100.0, 112.5, 126.6, 133.3, 150.0, 168.8, 189.8, 200.0]
+
+    # Kick every 1 times
+    b = M.core.Being()
+    b.fv_ = [0]
+    b.nu_ = [0]
+    b.f_ = [50]
+    b.d_ = [canta_t]
+    beat1 = b.render(int(tab_size))
+
+
+    # Kick every 4 times
+    c = M.core.Being()
+    c.fv_ = [0]
+    c.nu_ = [0]
+    c.f_ = [70, 0]
+    c.d_ = [canta_t, canta_t * 3]
+    beat4 = c.render(int(tab_size/2))
+
+    # Kick every 8 times
+    d = M.core.Being()
+    d.fv_ = [0]
+    d.nu_ = [0]
+    d.f_ = [90, 0];
+    d.d_ = [canta_t, canta_t * 15]
+    beat8 = d.render(int(tab_size/8));
+
+
+    #################
+
+
+    # Kick every 1 times
+    b = M.core.Being()
+    b.fv_ = [0]
+    b.nu_ = [0]
+    tab = [0]*tab_size
+    i = 0
+    for x in tab:
+        if (i % 2 == 0):
+            tab[i] = base[r.randrange(0, 8, 1)]
+        i += 1
+    b.f_ = tab
+    b.d_ = [canta_t]
+    note1 = b.render(int(tab_size))
+
+    # Kick every 4 times
+    c = M.core.Being()
+    c.fv_ = [0]
+    c.nu_ = [0]
+    tab = [0]*tab_size
+    i = 0
+    for x in tab:
+        if (i % 2 == 0):
+            tab[i] = base[r.randrange(0, 8, 1)]
+        i += 1
+    c.f = tab
+    c.d_ = [canta_t, canta_t * 3]
+    note4 = c.render(int(tab_size/2))
+
+    # Kick every 8 times
+    d = M.core.Being()
+    d.fv_ = [0]
+    d.nu_ = [0]
+    tab = [0]*tab_size
+    i = 0
+    for x in tab:
+        if (i % 2 == 0):
+            tab[i] = base[r.randrange(0, 8, 1)]
+        i += 1
+    d.f_ = tab;
+    d.d_ = [canta_t, canta_t * 15]
+    note8 = d.render(int(tab_size/8));
+
+    # Generation
+    #flo = H(beat1 * 1 + beat4 * 1 + beat8 * 1 + note1 + note4 + note8)
+    flo = H(note1 + note8)
+    #flo = H(note1 + note4 + note8)
+    M.core.WS(flo, 'my_music.wav')
+
+av = s.argv
+main(av)

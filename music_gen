@@ -1,0 +1,131 @@
+#!/bin/python3
+#   https://pypi.org/project/music/
+#   For the lib : pip install music
+#   By : Florent Loock & Maxime Deroulou
+#
+#
+import music as M
+import numpy as n
+import sys as s
+import random as r
+import time
+import sys
+
+seed = time.time()
+seed = s.argv[1]
+
+# Init
+T = M.tables.Basic()
+H = M.utils.H
+b = M.core.Being()
+
+r.seed(seed)
+
+def make_rytme(tab_c, len_tab, canta_t):
+    len_tab = int(len_tab)
+    c = M.core.Being()
+    #piano_keys = [659.255, 622.254, 587.33, 554.365, 523.251, 493.883, 466.164, 440, 415.305, 391.995, 369.994, 349.228, 329.628, 311.127, 293.665, 277.183, 261.626, 246.942, 233.082, 220, 207.652, 195.998, 184.997, 174.614, 164.814, 155.563, 146.832, 138.591, 130.813, 123.471, 116.541, 110, 100.0, 112.5, 126.6, 133.3, 150.0, 168.8, 189.8, 200.0]
+    piano_keys = [415.305, 391.995, 369.994, 349.228, 329.628, 311.127, 293.665, 277.183, 261.626, 246.942, 233.082, 220, 207.652, 195.998, 184.997, 174.614]
+
+    x1 = len(piano_keys)/2
+    vx1 = r.randrange(-len(piano_keys)/4, len(piano_keys)/4+1, 1)
+    gx1 = r.randrange(-len(piano_keys)/4, len(piano_keys)/4+1, 1)
+    c.fv_ = [r.randrange(0, 20)*canta_t*0]
+    c.nu_ = [r.randrange(0, 5)*canta_t*0]
+    tab = [0]*len_tab
+    i = 0
+    for x in tab:
+        if (i % 2 == 0):
+            x1 += vx1
+            vx1 += gx1
+            vx1 *= 0.75
+            gx1 *= 0.75
+            gx1 += r.randrange(-len(piano_keys)/4, len(piano_keys)/4+1, 1)
+            tab[i] = piano_keys[int((x1)%len(piano_keys))]
+        i += 1
+    c.f_ = tab
+    c.d_ = tab_c
+    b = c.render(int(len_tab))
+    return (b)
+
+def main(av):
+    canta_t = r.randrange(0, 75)/400+0.09
+    print("canta_t " + str(canta_t))
+    tab_size = 512
+
+    piano_keys = [659.255, 622.254, 587.33, 554.365, 523.251, 493.883, 466.164, 440, 415.305, 391.995, 369.994, 349.228, 329.628, 311.127, 293.665, 277.183, 261.626, 246.942, 233.082, 220, 207.652, 195.998, 184.997, 174.614, 164.814, 155.563, 146.832, 138.591, 130.813, 123.471, 116.541, 110, 100.0, 112.5, 126.6, 133.3, 150.0, 168.8, 189.8, 200.0]
+    piano_len = len(piano_keys)
+    octave = []
+    #print("Piano pack keys - " + str(piano_len))
+    select = 0 * 8#r.randrange(0, 5, 1) * 8
+    nb_octave = select / 8 + 1
+    #print("Octave n°" + str(select / 8 + 1))
+    for x in range(select, select + 8):
+        octave.append(piano_keys[x])
+    #print(str(octave))
+
+    sound_tab = []
+    c = M.core.Being()
+
+    b_s = 32
+
+    for x in range(0, 10):
+        tab = []
+        rand = r.randrange(0, 4)
+        if (rand == 0):
+            tab.append(make_rytme([canta_t], b_s, canta_t))
+            tab.append(make_rytme([canta_t], b_s, canta_t))
+            tab.append(make_rytme([canta_t*2, canta_t*2], b_s/2, canta_t))
+            tab.append(make_rytme([canta_t*4, canta_t*4], b_s/4, canta_t))
+            #tab.append(make_rytme([canta_t*4, canta_t*2, canta_t*2], b_s/4+b_s/8, canta_t))
+        elif (rand == 1):
+            tab.append(make_rytme([canta_t], b_s, canta_t))
+            tab.append(make_rytme([canta_t], b_s, canta_t))
+            tab.append(make_rytme([canta_t*2, canta_t*2], b_s/2, canta_t))
+            tab.append(make_rytme([canta_t*4, canta_t*4], b_s/4, canta_t))
+            tab.append(make_rytme([canta_t*4, canta_t*2, canta_t*2], b_s/4+b_s/8, canta_t))
+        elif (rand == 2):
+            tab.append(make_rytme([canta_t], b_s, canta_t))
+            tab.append(make_rytme([canta_t], b_s, canta_t))
+            tab.append(make_rytme([canta_t*2, canta_t*2], b_s/2, canta_t))
+            #tab.append(make_rytme([canta_t*4, canta_t*4], b_s/4, canta_t))
+            tab.append(make_rytme([canta_t*4, canta_t*2, canta_t*2], b_s/4+b_s/8, canta_t))
+        elif (rand == 3):
+            tab.append(make_rytme([canta_t], b_s, canta_t))
+            tab.append(make_rytme([canta_t], b_s, canta_t))
+            tab.append(make_rytme([canta_t*2, canta_t*2], b_s/2, canta_t))
+            #tab.append(make_rytme([canta_t*4, canta_t*4], b_s/4, canta_t))
+            #tab.append(make_rytme([canta_t*4, canta_t*2, canta_t*2], b_s/4+b_s/8, canta_t))
+        sound_tab.append(tab)
+        print("making " + str(x))
+
+    music_tab = []
+    for x in sound_tab:
+        b = x[0]
+        for y in range(1, len(x)):
+            b = H(b*1 + x[y])
+        music_tab.append(b)
+
+    # Generation
+    refrain1 = 0
+    for x in range(1, len(music_tab)*2):
+        if (x % 2 == 1):
+            refrain1 = H(refrain1, music_tab[0])
+        else:
+            refrain1 = H(refrain1, music_tab[int(x/2)])
+        print("compiling " + str(x))
+
+    #sound = H(refrain1)
+
+    M.core.WS(refrain1, 'my_music.wav')
+
+av = s.argv
+while (1):
+    try:
+        main(av)
+        break
+    except:
+        a = str(sys.exc_info())
+        print(a)
+        if (-1 == a.find("operands could not be broadcast together with shapes")):
+            break

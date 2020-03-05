@@ -1,0 +1,136 @@
+#!/bin/python3
+#   https://pypi.org/project/music/
+#   For the lib : pip install music
+#   By : Florent Loock & Maxime Deroulou
+#
+#
+import music as M
+import numpy as n
+import sys as s
+import random as r
+
+# Init
+
+T = M.tables.Basic()
+H = M.utils.H
+b = M.core.Being()
+
+r.seed(1)
+print(r.random())
+print(r.random())
+print(r.random())
+print(r.random())
+print(r.random())
+
+def main(av):
+    canta_t = 0.1
+    tab_size = 512
+
+    piano_keys = [659.255, 622.254, 587.33, 554.365, 523.251, 493.883, 466.164, 440, 415.305, 391.995, 369.994, 349.228, 329.628, 311.127, 293.665, 277.183, 261.626, 246.942, 233.082, 220, 207.652, 195.998, 184.997, 174.614, 164.814, 155.563, 146.832, 138.591, 130.813, 123.471, 116.541, 110, 100.0, 112.5, 126.6, 133.3, 150.0, 168.8, 189.8, 200.0]
+    piano_len = len(piano_keys)
+    octave = []
+    print("Piano pack keys - " + str(piano_len))
+    select = 0 * 8#r.randrange(0, 5, 1) * 8
+    nb_octave = select / 8 + 1
+    print("Octave n°" + str(select / 8 + 1))
+    for x in range(select, select + 8):
+        octave.append(piano_keys[x])
+    print(str(octave))
+
+    # Kick every 1 times
+    b = M.core.Being()
+    b.fv_ = [0]
+    b.nu_ = [0]
+    b.f_ = [octave[7], 0, octave[4], 0]
+    b.d_ = [canta_t]
+    beat1 = b.render(int(tab_size))
+
+
+    # Kick every 4 times
+    c = M.core.Being()
+    c.fv_ = [0]
+    c.nu_ = [0]
+    c.f_ = [octave[4], 0]
+    c.d_ = [canta_t, canta_t * 3]
+    beat4 = c.render(int(tab_size/2))
+
+    # Kick every 16 times
+    d = M.core.Being()
+    d.fv_ = [0]
+    d.nu_ = [0]
+    d.f_ = [0, 0];
+    d.d_ = [canta_t, canta_t * 15]
+    beat16 = d.render(int(tab_size/8));
+
+
+    #################
+
+
+    # Note every 1 times
+    x = 20
+    vx = 0
+    gx = 0
+    b = M.core.Being()
+    b.fv_ = [0]
+    b.nu_ = [0]
+    tab = [0]*tab_size
+    i = 0
+    for x in tab:
+        if (i % 2 == 0):
+            x += vx
+            vx += gx
+            vx *= 0.8
+            gx *= 0.8
+            gx += r.randrange(-1, 2, 1)
+            x %= 32
+            tab[i] = piano_keys[int(x)+8]
+        i += 1
+    b.f_ = tab
+    b.d_ = [canta_t]
+    note1 = b.render(int(tab_size))
+
+
+    x1 = 0
+    vx1 = 0
+    gx1 = 0
+    # Note every 4 times
+    c = M.core.Being()
+    c.fv_ = [5]
+    c.nu_ = [1]
+    tab = [0]*tab_size
+    i = 0
+    for x in tab:
+        if (i % 2 == 0):
+            x1 += vx1
+            vx1 += gx1
+            vx1 *= 0.5
+            gx1 *= 0.5
+            gx1 += r.randrange(-1, 2, 1)
+            tab[i] = piano_keys[int((x-x1)%32)+8]
+        i += 1
+    c.f_ = tab
+    c.d_ = [canta_t*3, canta_t]
+    note4 = c.render(int(tab_size/2))
+
+    # Note every 16 times
+    d = M.core.Being()
+    d.fv_ = [0]
+    d.nu_ = [0]
+    tab = [0]*tab_size
+    i = 0
+    for x in tab:
+        if (i % 2 == 0):
+            tab[i] = piano_keys[r.randrange(0, piano_len, 1)]
+        i += 1
+    d.f_ = tab;
+    d.d_ = [canta_t, canta_t * 15]
+    note16 = d.render(int(tab_size/8));
+
+    # Generation
+    #sound = H(beat1 * 1 + beat4 * 1 + beat16 * 1 + note1 + note4 + note16)
+    sound = H((note1, note4) + beat16*0.8 + beat4*0.2)
+    #sound = H(note1 + note4 + note8)
+    M.core.WS(sound, 'my_music.wav')
+
+av = s.argv
+main(av)
